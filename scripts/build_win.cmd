@@ -69,23 +69,31 @@ if DEFINED APPVEYOR (
 ) else (
     :: Change the settings here to match your setup
     :: Change MSVC_VERSION to 12 to use VS 2013
-    if NOT DEFINED MSVC_VERSION set MSVC_VERSION=14
+    ::  根据自己vs版本设置，2013就是12,2015就是14，我的是14
+    if NOT DEFINED MSVC_VERSION set MSVC_VERSION=14 
     :: Change to 1 to use Ninja generator (builds much faster)
-    if NOT DEFINED WITH_NINJA set WITH_NINJA=1
+    :: 这里由于我使用的cmake编译，未使用ninja，所有设置为了0
+    if NOT DEFINED WITH_NINJA set WITH_NINJA=0
     :: Change to 1 to build caffe without CUDA support
+    :: 这里我使用了cuda，所有设置为0，若是CPU版本则设置为1;
     if NOT DEFINED CPU_ONLY set CPU_ONLY=0
     :: Change to generate CUDA code for one of the following GPU architectures
     :: [Fermi  Kepler  Maxwell  Pascal  All]
-    if NOT DEFINED CUDA_ARCH_NAME set CUDA_ARCH_NAME=Auto
+    :: 此处一定要注意，如果安装了多个cuda版本，需要将其设置为All,不然会报出compute_arch不支持的错误;
+    if NOT DEFINED CUDA_ARCH_NAME set CUDA_ARCH_NAME=All
     :: Change to Debug to build Debug. This is only relevant for the Ninja generator the Visual Studio generator will generate both Debug and Release configs
+    :: 此处就是编译vs的版本，是Release还是Debug版本，我的是Release
     if NOT DEFINED CMAKE_CONFIG set CMAKE_CONFIG=Release
     :: Set to 1 to use NCCL
+    :: 是否使用多卡训练
     if NOT DEFINED USE_NCCL set USE_NCCL=0
     :: Change to 1 to build a caffe.dll
     if NOT DEFINED CMAKE_BUILD_SHARED_LIBS set CMAKE_BUILD_SHARED_LIBS=0
     :: Change to 3 if using python 3.5 (only 2.7 and 3.5 are supported)
-    if NOT DEFINED PYTHON_VERSION set PYTHON_VERSION=2
+    :: 选择python版本，我使用是python 3.5，所以修改为3
+    if NOT DEFINED PYTHON_VERSION set PYTHON_VERSION=3
     :: Change these options for your needs.
+    :: 这里选择需要的选项，我需要python，所以将python选项设置为了1，如果需要MATLAB，则将其也设置为1
     if NOT DEFINED BUILD_PYTHON set BUILD_PYTHON=1
     if NOT DEFINED BUILD_PYTHON_LAYER set BUILD_PYTHON_LAYER=1
     if NOT DEFINED BUILD_MATLAB set BUILD_MATLAB=0
@@ -96,6 +104,7 @@ if DEFINED APPVEYOR (
     :: Run lint
     if NOT DEFINED RUN_LINT set RUN_LINT=0
     :: Build the install target
+    :: 生成安装文件，所以需要设置为1
     if NOT DEFINED RUN_INSTALL set RUN_INSTALL=0
 )
 
